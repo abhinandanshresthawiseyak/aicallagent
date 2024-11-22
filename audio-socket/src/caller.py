@@ -1,0 +1,54 @@
+import wave
+from threading import Thread
+from call_handler import *
+import time
+import threading
+import sys
+sys.path.append('./')
+from audiosocket.audiosocket import Audiosocket
+audiosocket = Audiosocket(("0.0.0.0", 5001))
+
+def handle_connection(conn):
+    logging.info("Peer Address: ",conn.peer_addr)
+    with wave.open('../audios/isp1 (2).wav', 'r') as wav_file:
+        frames = wav_file.getnframes()
+        rate = wav_file.getframerate()
+        duration = frames / float(rate)
+
+    callHandler=CallHandler(initial_audio_in_seconds=duration)
+    # callHandler=CallHandler(initial_audio_in_seconds=4)
+    callHandler.caller=True
+
+    start_thread=False
+
+    while conn.connected:
+        
+        # print('connected')
+        audio_bytes = conn.read()
+        callHandler.audio_buffer.write(audio_bytes)
+        
+        # callHandler.audio_buffer.write(upsample_audio_stream(audio_bytes))
+        if start_thread!=True:
+            requests.post(callHandler.call_logs_url, params={'caller_id': callHandler.caller_id,'event_type': 'Call Started','event_detail': ''}, headers={'accept': 'application/json'})
+            time.sleep(1)
+            conn.write_audio(get_audio_bytes('../audios/isp1 (2).wav'))
+            threading.Thread(target=callHandler.read_buffer_chunks, daemon=True).start()
+            threading.Thread(target=callHandler.read_vad_dictionary, daemon=True).start()
+            threading.Thread(target=callHandler.asr, daemon=True).start()
+            threading.Thread(target=callHandler.llm, daemon=True).start()
+            threading.Thread(target=callHandler.tts, daemon=True).start()
+            threading.Thread(target=callHandler.send_audio_back, daemon=True, args=(conn,)).start()
+            threading.Thread(target=callHandler.call_hangup, daemon=True, args=(conn,)).start()
+            start_thread=True
+    
+    logging.info(conn, "Exited from while loop")
+    callHandler.run_threads=False
+    logging.info(callHandler.run_threads, "Stopping all threads by setting run_threads=")
+    conn.hangup()
+    
+
+while True:
+    conn = audiosocket.listen()
+    # handle_connection(conn)
+    connection_thread = Thread(target=handle_connection, args=(conn,))
+    connection_thread.start()

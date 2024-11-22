@@ -1,0 +1,124 @@
+out_state: 4
+type: atm_capture
+question_audio_for_tts:
+  '1':
+    yes: नमस्ते! म ग्लोबल बैंकबाट प्रतिवा बोल्दैछु! के तपाईं {name} जी बोल्दै हुनुहुन्छ!
+  '2':
+    no: तपाईंको समयको लागि धन्यवाद। म कुनै पनि अवरोधको लागि क्षमा चाहन्छु।
+    yes: तपाईंको एटीएम कार्ड क्याप्चर भएको विषयमा कुरा गर्नु थियो। अहिले हजुरसँग
+      कुरा गर्न मिल्छ?
+  '3':
+    no: मैले तपाईंको प्रतिक्रिया रेकर्ड गरेकी छु। तपाईंको समयको लागि धन्यवाद।
+    yes: हामीले तपाईंको कार्डलाई अस्थायी रूपमा ब्लक गरेका छौं। तपाईंको कार्ड एक
+      हप्ता पछि मात्र बैंकमा आउनेछ र कार्ड फिर्ता लिनको लागि तपाईं आफ्नो नागरिकता
+      वा ड्राइभिङ लाइसेन्स वा पासपोर्ट लिएर ग्लोबल बैंकको कमलादी शाखामा जानुहोला।
+  '4':
+    no: मैले तपाईंको प्रतिक्रिया रेकर्ड गरेकी छु, तपाईंको समयको लागि धन्यवाद।
+  '5':
+    yes: हुन्छ, तपाईंको समयको लागि धन्यवाद। केही गार्हो पर्यो भने सम्पर्क गर्नुहोला।
+llm_states:
+  '1':
+    negative:
+    - हैन
+    - हैन नि
+    - म त अर्कै मान्छे हो
+    - मेरो नाम त रमेश हो
+    - रंग नम्बर पर्यो
+    - रङ नम्बर पर्‍यो
+    - होइन
+    positive:
+    - हो म {name} बोल्दै छु 
+    - हजुर हो
+    - हजुर बोल्दै छु
+    - के कुरा को लागि हो
+    - हजुर भन्नुस म सुनिरहेको छु
+    - ओभाओ भन्नुस् न
+    - हजार भनोस् न के काम पर्‍यो
+    - हजार भनोस् न
+  '2':
+    negative:
+    - अहिले त मिल्दैन
+    - मिल्दैन
+    - भोलि मात्रै मिल्छ
+    - एकै छिन पछि मात्रै मिल्छ
+    - अहिले मिल्दैन
+    - हजुर मिल दैन
+    positive:
+    - मिल्छ
+    - मिल्छ मिल्छ
+    - हजुर भन्नुस न
+    - अहिले मिल्छ
+    - हजुर मिल छ
+  '3':
+    negative:
+    - हुँदैन
+    - अलि छिटो गर्न मिल्दैन?
+    - मलाई हतार छ, अलि चाँडो मिल्छ कि?
+    - म सँग अहिले डकुमेन्टहरू केही पनि छैन
+    - अलि समय पछि जाँदा पनि हुन्छ?
+    positive:
+    - हुन्छ
+    - हुन्छ, समय मिलाएर जान पर्ला
+    - धन्यवाद, म जान्छु
+    - म छिट्टै जान्छु
+  '4':
+    negative:
+    - बुझिन
+    - बुझिएन
+    positive:
+    - बुझे
+    - राम्ररी बुझे
+    - बुझे नि, धन्यवाद
+  repeat:
+  - - could you speak louder
+    - i can't hear you
+    - repeat
+    - repeat please
+    - can you speak alittle louder?
+    - pardon?
+    - can you repeat?
+    - could you repeat?
+    - मैले बुझिन
+    - मलाई फेरी भनि दिनुस न
+    - हजुरले के भन्नु भएको मैले बुझिन
+    - हजुर के भन्नु भाको?
+tts_next_states:
+  '1':
+    no:
+      audio_file: atm_capture2no.wav
+      next_state: out_state
+    repeat:
+      audio_file: atm_capture1.wav
+      next_state: 1
+    yes:
+      audio_file: atm_capture2yes.wav
+      next_state: 2
+  '2':
+    no:
+      audio_file: atm_capture3no.wav
+      next_state: out_state
+    repeat:
+      audio_file: atm_capture2yes.wav
+      next_state: 2
+    yes:
+      audio_file: atm_capture3yes.wav
+      next_state: 3
+  '3':
+    no:
+      audio_file: atm_capture4no.wav
+      next_state: out_state
+    repeat:
+      audio_file: atm_capture3yes.wav
+      next_state: 3
+    yes:
+      audio_file: atm_capture5.wav
+      next_state: 4
+  '4':
+    no:
+      audio_file: atm_capture5.wav
+    repeat:
+      audio_file: atm_capture5.wav
+      next_state: 4
+    yes:
+      audio_file: atm_capture5.wav
+

@@ -1,0 +1,30 @@
+# Step 1: Use the official Python 3.8.6 slim image
+FROM python:3.8.6-slim
+
+# Step 2: Set the working directory in the container
+WORKDIR /app
+
+# Step 3: Install required system dependencies including git, nano, and PostgreSQL client
+RUN apt-get update && \
+    apt-get install -y git nano libpq-dev gcc && \
+    pip install --upgrade pip
+
+# Step 4: Copy the requirements.txt and install the Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Step 5: Copy the rest of the application code into the container
+# COPY . /app
+
+# # Step 6: Change the working directory to `src/voip` before running the app
+WORKDIR /app/src
+
+# # Step 7: Copy and replace SIP.py and VoIP.py into their respective locations
+# RUN cp /app/SIP.py /usr/local/lib/python3.8/site-packages/pyVoIP/SIP.py && \
+#     cp /app/VoIP.py /usr/local/lib/python3.8/site-packages/pyVoIP/VoIP/VoIP.py
+
+# Step 7: Expose port 8001 (used by FastAPI)
+EXPOSE 8001
+
+# # Step 8: Set the entry point for the container to run the FastAPI app using Uvicorn
+CMD ["python","main_api_server.py"]
