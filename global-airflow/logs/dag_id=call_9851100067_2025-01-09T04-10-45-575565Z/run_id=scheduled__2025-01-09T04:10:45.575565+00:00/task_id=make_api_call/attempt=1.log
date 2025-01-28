@@ -1,0 +1,22 @@
+[2025-01-09T04:10:58.485+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-09T04:10:58.494+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9851100067_2025-01-09T04-10-45-575565Z.make_api_call scheduled__2025-01-09T04:10:45.575565+00:00 [queued]>
+[2025-01-09T04:10:58.497+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9851100067_2025-01-09T04-10-45-575565Z.make_api_call scheduled__2025-01-09T04:10:45.575565+00:00 [queued]>
+[2025-01-09T04:10:58.497+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2025-01-09T04:10:58.502+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): make_api_call> on 2025-01-09 04:10:45.575565+00:00
+[2025-01-09T04:10:58.507+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=24279) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-01-09T04:10:58.508+0000] {standard_task_runner.py:72} INFO - Started process 24280 to run task
+[2025-01-09T04:10:58.508+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9851100067_2025-01-09T04-10-45-575565Z', 'make_api_call', 'scheduled__2025-01-09T04:10:45.575565+00:00', '--job-id', '1049', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmpxgu_itkx']
+[2025-01-09T04:10:58.508+0000] {standard_task_runner.py:105} INFO - Job 1049: Subtask make_api_call
+[2025-01-09T04:10:58.529+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9851100067_2025-01-09T04-10-45-575565Z.make_api_call scheduled__2025-01-09T04:10:45.575565+00:00 [running]> on host 680cb867086b
+[2025-01-09T04:10:58.564+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9851100067_2025-01-09T04-10-45-575565Z' AIRFLOW_CTX_TASK_ID='make_api_call' AIRFLOW_CTX_EXECUTION_DATE='2025-01-09T04:10:45.575565+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-01-09T04:10:45.575565+00:00'
+[2025-01-09T04:10:58.564+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-09T04:10:58.571+0000] {logging_mixin.py:190} INFO - API call to http://192.168.79.109:8001/call completed with status code 200
+channelId: demo-scheduled-from-ui-globald272a4ee-7103-409a-843a-5c591666878d
+[2025-01-09T04:10:58.571+0000] {python.py:240} INFO - Done. Returned value was: 200
+[2025-01-09T04:10:58.581+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-09T04:10:58.581+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9851100067_2025-01-09T04-10-45-575565Z, task_id=make_api_call, run_id=scheduled__2025-01-09T04:10:45.575565+00:00, execution_date=20250109T041045, start_date=20250109T041058, end_date=20250109T041058
+[2025-01-09T04:10:58.600+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-01-09T04:10:58.613+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-01-09T04:10:58.614+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

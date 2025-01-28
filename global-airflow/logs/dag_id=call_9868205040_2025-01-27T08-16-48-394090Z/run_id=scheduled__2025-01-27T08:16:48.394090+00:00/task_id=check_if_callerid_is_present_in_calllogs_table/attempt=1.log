@@ -1,0 +1,23 @@
+[2025-01-27T08:18:11.883+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-01-27T08:18:11.892+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9868205040_2025-01-27T08-16-48-394090Z.check_if_callerid_is_present_in_calllogs_table scheduled__2025-01-27T08:16:48.394090+00:00 [queued]>
+[2025-01-27T08:18:11.895+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9868205040_2025-01-27T08-16-48-394090Z.check_if_callerid_is_present_in_calllogs_table scheduled__2025-01-27T08:16:48.394090+00:00 [queued]>
+[2025-01-27T08:18:11.895+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2025-01-27T08:18:11.900+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): check_if_callerid_is_present_in_calllogs_table> on 2025-01-27 08:16:48.394090+00:00
+[2025-01-27T08:18:11.905+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=3336) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-01-27T08:18:11.905+0000] {standard_task_runner.py:72} INFO - Started process 3339 to run task
+[2025-01-27T08:18:11.906+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9868205040_2025-01-27T08-16-48-394090Z', 'check_if_callerid_is_present_in_calllogs_table', 'scheduled__2025-01-27T08:16:48.394090+00:00', '--job-id', '1339', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmp0yqn8gs9']
+[2025-01-27T08:18:11.907+0000] {standard_task_runner.py:105} INFO - Job 1339: Subtask check_if_callerid_is_present_in_calllogs_table
+[2025-01-27T08:18:11.928+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9868205040_2025-01-27T08-16-48-394090Z.check_if_callerid_is_present_in_calllogs_table scheduled__2025-01-27T08:16:48.394090+00:00 [running]> on host 680cb867086b
+[2025-01-27T08:18:11.963+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9868205040_2025-01-27T08-16-48-394090Z' AIRFLOW_CTX_TASK_ID='check_if_callerid_is_present_in_calllogs_table' AIRFLOW_CTX_EXECUTION_DATE='2025-01-27T08:16:48.394090+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-01-27T08:16:48.394090+00:00'
+[2025-01-27T08:18:11.963+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-01-27T08:18:11.968+0000] {base.py:84} INFO - Retrieving connection 'aicallagent'
+[2025-01-27T08:18:11.971+0000] {sql.py:544} INFO - Running statement: SELECT * FROM call_logs WHERE caller_id = 'demo-scheduled-from-ui-worldlink5c32b03e-9495-43c9-94e0-80f114968874' limit 1;, parameters: None
+[2025-01-27T08:18:11.973+0000] {sql.py:553} INFO - Rows affected: 1
+[2025-01-27T08:18:11.973+0000] {python.py:240} INFO - Done. Returned value was: answered
+[2025-01-27T08:18:11.983+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-01-27T08:18:11.983+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9868205040_2025-01-27T08-16-48-394090Z, task_id=check_if_callerid_is_present_in_calllogs_table, run_id=scheduled__2025-01-27T08:16:48.394090+00:00, execution_date=20250127T081648, start_date=20250127T081811, end_date=20250127T081811
+[2025-01-27T08:18:11.998+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-01-27T08:18:12.011+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-01-27T08:18:12.011+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

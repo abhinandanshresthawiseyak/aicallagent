@@ -1,0 +1,21 @@
+[2024-12-09T11:09:36.968+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-09T11:09:36.974+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: mydag.pause manual__2024-12-09T11:09:36.251044+00:00 [queued]>
+[2024-12-09T11:09:36.977+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: mydag.pause manual__2024-12-09T11:09:36.251044+00:00 [queued]>
+[2024-12-09T11:09:36.977+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-09T11:09:36.982+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): pause> on 2024-12-09 11:09:36.251044+00:00
+[2024-12-09T11:09:36.987+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=391) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-09T11:09:36.987+0000] {standard_task_runner.py:72} INFO - Started process 392 to run task
+[2024-12-09T11:09:36.988+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'mydag', 'pause', 'manual__2024-12-09T11:09:36.251044+00:00', '--job-id', '239', '--raw', '--subdir', 'DAGS_FOLDER/testdag.py', '--cfg-path', '/tmp/tmph0d9951t']
+[2024-12-09T11:09:36.988+0000] {standard_task_runner.py:105} INFO - Job 239: Subtask pause
+[2024-12-09T11:09:37.005+0000] {task_command.py:467} INFO - Running <TaskInstance: mydag.pause manual__2024-12-09T11:09:36.251044+00:00 [running]> on host e4d9da3426d6
+[2024-12-09T11:09:37.041+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='mydag' AIRFLOW_CTX_TASK_ID='pause' AIRFLOW_CTX_EXECUTION_DATE='2024-12-09T11:09:36.251044+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-12-09T11:09:36.251044+00:00'
+[2024-12-09T11:09:37.041+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-09T11:10:02.168+0000] {local_task_job_runner.py:346} WARNING - State of this instance has been externally set to failed. Terminating instance.
+[2024-12-09T11:10:02.168+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2024-12-09T11:10:02.169+0000] {process_utils.py:132} INFO - Sending 15 to group 392. PIDs of all processes in the group: [392]
+[2024-12-09T11:10:02.169+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 392
+[2024-12-09T11:10:02.169+0000] {taskinstance.py:3093} ERROR - Received SIGTERM. Terminating subprocesses.
+[2024-12-09T11:10:02.177+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-09T11:10:02.195+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=392, status='terminated', exitcode=0, started='11:09:36') (392) terminated with exit code 0

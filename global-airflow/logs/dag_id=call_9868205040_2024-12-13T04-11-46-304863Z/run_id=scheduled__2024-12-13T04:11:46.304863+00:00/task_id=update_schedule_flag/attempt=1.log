@@ -1,0 +1,22 @@
+[2024-12-13T04:11:50.466+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-13T04:11:50.475+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9868205040_2024-12-13T04-11-46-304863Z.update_schedule_flag scheduled__2024-12-13T04:11:46.304863+00:00 [queued]>
+[2024-12-13T04:11:50.479+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9868205040_2024-12-13T04-11-46-304863Z.update_schedule_flag scheduled__2024-12-13T04:11:46.304863+00:00 [queued]>
+[2024-12-13T04:11:50.479+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-13T04:11:50.484+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): update_schedule_flag> on 2024-12-13 04:11:46.304863+00:00
+[2024-12-13T04:11:50.489+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=57006) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-13T04:11:50.490+0000] {standard_task_runner.py:72} INFO - Started process 57007 to run task
+[2024-12-13T04:11:50.491+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9868205040_2024-12-13T04-11-46-304863Z', 'update_schedule_flag', 'scheduled__2024-12-13T04:11:46.304863+00:00', '--job-id', '468', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmp3bs2g8g3']
+[2024-12-13T04:11:50.491+0000] {standard_task_runner.py:105} INFO - Job 468: Subtask update_schedule_flag
+[2024-12-13T04:11:50.514+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9868205040_2024-12-13T04-11-46-304863Z.update_schedule_flag scheduled__2024-12-13T04:11:46.304863+00:00 [running]> on host 1868de310944
+[2024-12-13T04:11:50.552+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9868205040_2024-12-13T04-11-46-304863Z' AIRFLOW_CTX_TASK_ID='update_schedule_flag' AIRFLOW_CTX_EXECUTION_DATE='2024-12-13T04:11:46.304863+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-13T04:11:46.304863+00:00'
+[2024-12-13T04:11:50.552+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-13T04:11:50.554+0000] {logging_mixin.py:190} INFO - 114
+[2024-12-13T04:12:55.917+0000] {local_task_job_runner.py:346} WARNING - State of this instance has been externally set to removed. Terminating instance.
+[2024-12-13T04:12:55.918+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2024-12-13T04:12:55.919+0000] {process_utils.py:132} INFO - Sending 15 to group 57007. PIDs of all processes in the group: [57007]
+[2024-12-13T04:12:55.919+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 57007
+[2024-12-13T04:12:55.919+0000] {taskinstance.py:3093} ERROR - Received SIGTERM. Terminating subprocesses.
+[2024-12-13T04:12:55.927+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-13T04:12:55.946+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=57007, status='terminated', exitcode=0, started='04:11:49') (57007) terminated with exit code 0

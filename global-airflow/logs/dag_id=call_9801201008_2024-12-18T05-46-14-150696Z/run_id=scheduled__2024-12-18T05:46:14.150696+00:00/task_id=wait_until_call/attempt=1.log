@@ -1,0 +1,21 @@
+[2024-12-18T05:46:39.572+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-18T05:46:39.580+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9801201008_2024-12-18T05-46-14-150696Z.wait_until_call scheduled__2024-12-18T05:46:14.150696+00:00 [queued]>
+[2024-12-18T05:46:39.583+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9801201008_2024-12-18T05-46-14-150696Z.wait_until_call scheduled__2024-12-18T05:46:14.150696+00:00 [queued]>
+[2024-12-18T05:46:39.583+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-18T05:46:39.589+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): wait_until_call> on 2024-12-18 05:46:14.150696+00:00
+[2024-12-18T05:46:39.594+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=155397) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-18T05:46:39.594+0000] {standard_task_runner.py:72} INFO - Started process 155398 to run task
+[2024-12-18T05:46:39.595+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9801201008_2024-12-18T05-46-14-150696Z', 'wait_until_call', 'scheduled__2024-12-18T05:46:14.150696+00:00', '--job-id', '701', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmpebrtt473']
+[2024-12-18T05:46:39.595+0000] {standard_task_runner.py:105} INFO - Job 701: Subtask wait_until_call
+[2024-12-18T05:46:39.616+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9801201008_2024-12-18T05-46-14-150696Z.wait_until_call scheduled__2024-12-18T05:46:14.150696+00:00 [running]> on host 1868de310944
+[2024-12-18T05:46:39.651+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9801201008_2024-12-18T05-46-14-150696Z' AIRFLOW_CTX_TASK_ID='wait_until_call' AIRFLOW_CTX_EXECUTION_DATE='2024-12-18T05:46:14.150696+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-18T05:46:14.150696+00:00'
+[2024-12-18T05:46:39.651+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-18T05:46:39.652+0000] {logging_mixin.py:190} INFO - 161
+[2024-12-18T05:48:39.653+0000] {python.py:240} INFO - Done. Returned value was: None
+[2024-12-18T05:48:39.659+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-18T05:48:39.659+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9801201008_2024-12-18T05-46-14-150696Z, task_id=wait_until_call, run_id=scheduled__2024-12-18T05:46:14.150696+00:00, execution_date=20241218T054614, start_date=20241218T054639, end_date=20241218T054839
+[2024-12-18T05:48:39.687+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-12-18T05:48:39.699+0000] {taskinstance.py:3895} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2024-12-18T05:48:39.700+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

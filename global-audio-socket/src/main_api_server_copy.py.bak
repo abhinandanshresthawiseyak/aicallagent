@@ -1,0 +1,396 @@
+import os,sys
+
+from fastapi.responses import HTMLResponse
+# Add the project root directory to sys.path and then import llm_handler from callbot
+sys.path.append('./')
+from dbconn import models
+from dbconn.database import SessionLocal, engine
+from fastapi import FastAPI, Depends, Form, HTTPException
+from sqlalchemy.orm import Session
+import uvicorn, requests
+from requests.auth import HTTPBasicAuth
+from datetime import datetime, timedelta, timezone
+# import pytz
+import logging
+# Create the database tables
+models.Base.metadata.create_all(bind=engine)
+
+# Configure logging to output to the console
+logging.basicConfig(level=logging.INFO , format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+app = FastAPI()
+
+
+@app.get("/", response_class=HTMLResponse)
+def show_call_form():
+    # Directly returning HTML content
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Make a Call</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif; /* Sets a clean, modern font for the page */
+                background-color: #f4f4f9; /* A light grey background */
+                margin: 0;
+                padding: 20px;
+            }
+            form {
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adds a subtle shadow to the form */
+                width: fit-content; /* Ensures the form width fits its content */
+                margin: auto; /* Centers the form horizontally */
+                display: block; /* Ensures the form takes its own line */
+            }
+            h1 {
+                text-align: center; /* Centers the title */
+                color: #333; /* Dark grey color for the text */
+            }
+            label {
+                font-size: 16px; /* Increases font size for readability */
+                color: #555; /* A darker grey for text */
+            }
+            input[type="text"],
+            input[type="number"] {
+                padding: 8px;
+                margin-top: 5px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                display: block; /* Makes input take the full width of the form */
+                width: 95%; /* Makes sure the input fields are not too wide */
+            }
+            button {
+                background-color: #4CAF50; /* A nice green background */
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer; /* Changes the cursor to indicate it's clickable */
+                width: 100%; /* Makes the button take full width of the form */
+            }
+            button:hover {
+                background-color: #45a049; /* A slightly darker green for hover effect */
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Make a Call</h1>
+        <form action="/call" method="post">
+            <label for="number">Phone Number:</label>
+            <input type="text" id="number" name="number" value="9851100067" required>
+            <label for="extension">Extension:</label>
+            <input type="number" id="extension" name="extension" value="106" required>
+            <button type="submit">Call</button>
+        </form><br>
+
+        <form action="/schedule_call" method="post">
+            <label for="number">Phone Number:</label>
+            <input type="text" id="number" name="number" value="9851100067" required>
+            <label for="schedule">Schedule (in minutes):</label>
+            <input type="number" id="schedule" name="schedule" value="5" required>
+            <button type="submit">Call</button>
+        </form>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
+@app.post("/schedule_call")
+def schedule_call(number: str = Form(...), schedule_in_minutes:int= Form(...), db: Session = Depends(get_db)):
+    scheduled_time = datetime.utcnow() + timedelta(minutes=schedule_in_minutes)
+    return create_user(
+        caller_id=f"demo-scheduled-from-ui",
+        name="Demo Schedule",
+        phone_number=number,
+        call_type="outbound",
+        tts_folder_location="/path/to/tts",
+        status="pending",
+        assigned_container="audiosocket-ne-106",
+        scheduled_for_utc=scheduled_time,
+        db=db
+    )
+
+@app.post("/call_logs/")
+def create_call_log(caller_id:str, event_type: str, event_detail: str = None, db: Session = Depends(get_db)):
+    db_call_log = models.CallLog(caller_id=caller_id, event_type=event_type, event_detail=event_detail)
+    db.add(db_call_log)
+    db.commit()
+    db.refresh(db_call_log)
+    return db_call_log
+
+@app.get("/call_logs/")
+def read_call_logs(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    
+    return db.query(models.CallLog).offset(skip).limit(limit).all()
+
+@app.post("/populate_docker_callhandler")
+def populate_docker_callhandler(ip_range_start: str, ip_range_end: str, db:Session=Depends(get_db)):
+
+    start = int(ip_range_start.split('.')[-1]) # get 101 from 192.x.x.101
+    end = int(ip_range_end.split('.')[-1]) # get 105 from 192.1x.x.105
+
+    # Base part of the IP address
+    base_ip = '.'.join(ip_range_start.split('.')[:-1]) # get 192.x.x
+    id=1
+
+    for i in range(start,end+1):
+        for j in range(1,3):
+            container_ip=f"{base_ip}.{i}"
+            container_status_record = models.DockerCallHandler(id=id, container_name="audiosocket-"+str(i), container_ip=container_ip, client_id=j, max_clients=2, extension=i, active=False,data_json=None)
+            db.add(container_status_record)
+            db.commit()
+            db.refresh(container_status_record)
+            id+=1
+        
+@app.get("/get_container_status")
+def get_container_status(db: Session = Depends(get_db)):
+    return db.query(models.DockerCallHandler).all()
+
+# @app.get("/get_freed_containerip")
+# def get_freed_containerip(db: Session = Depends(get_db)):
+#     # Query to get all container_ip where active_clients < max_clients
+#     result = db.query(models.DockerCallHandler.container_ip).filter(
+#         models.DockerCallHandler.active_clients < models.DockerCallHandler.max_clients
+#     ).all()
+    
+#     # Extract container_ip from the result and return as a list
+#     return [container_ip[0] for container_ip in result][0]
+
+@app.patch("/update_container_status")
+def update_container_status(extension: int, client_id: int, active: bool, db:Session=Depends(get_db)):
+    container = db.query(models.DockerCallHandler).filter(models.DockerCallHandler.extension == extension , models.DockerCallHandler.client_id == client_id).first()
+
+    if not container:
+        raise HTTPException(status_code=404, detail="container not found")
+    
+    container.active = active
+    container.modified_on_utc = datetime.now(timezone.utc)  # Use timezone.utc directly
+    
+    db.commit()
+    db.refresh(container)
+    return container
+
+# POST request to create a user by directly passing parameters
+@app.post("/users/")
+def create_user(
+    caller_id: str,
+    name: str,
+    phone_number: str,
+    call_type: str,
+    tts_folder_location: str,
+    status: str,
+    assigned_container: str,
+    scheduled_for_utc: datetime,
+    db: Session = Depends(get_db)
+):
+    db_user = models.UserDetails(
+        caller_id=caller_id,
+        name=name,
+        phone_number=phone_number,
+        call_type=call_type,
+        tts_folder_location=tts_folder_location,
+        status=status,
+        assigned_container=assigned_container,
+        scheduled_for_utc=scheduled_for_utc
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+# GET request to retrieve all users with optional pagination
+@app.get("/users/")
+def get_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    users = db.query(models.UserDetails).offset(skip).limit(limit).all()
+    return users
+
+# GET request to retrieve a user by ID
+@app.get("/users/{phone_number}")
+def get_user(phone_number: str, db: Session = Depends(get_db)):
+    user = db.query(models.UserDetails).filter(models.UserDetails.phone_number == phone_number).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+# GET request to retrieve a user by assigned_container
+@app.get("/assigned_container_user")
+def get_assigned_container_user(assigned_container: str, db: Session = Depends(get_db)):
+    user = db.query(models.UserDetails).filter(models.UserDetails.assigned_container == assigned_container,
+        models.UserDetails.status == 'called').first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+# PATCH request to update a user's status
+@app.patch("/users/status/{caller_id}")
+def update_user_status(caller_id: str, call_type: dict, tts_folder_location:str, status: str,assigned_container:str,scheduled_for_utc:datetime, db: Session = Depends(get_db)):
+    # Find the user by ID
+    user = db.query(models.UserDetails).filter(models.UserDetails.caller_id == caller_id).first()
+    
+    # Check if the user exists
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    
+    user.call_type = call_type
+
+    user.tts_folder_location = tts_folder_location
+
+    user.status = status
+
+    user.assigned_container = assigned_container
+
+    user.scheduled_for_utc = scheduled_for_utc
+
+    # user.scheduled_for_utc = datetime.now(timezone.utc)  # Update the modified timestamp
+    user.modified_on_utc = datetime.now()
+
+    # Commit the changes to the database
+    db.commit()
+    db.refresh(user)
+    
+    return user
+
+
+# @app.get("/voip_users")
+# def read_voip_users(db: Session = Depends(get_db)):
+#     return db.query(models.VoIPUsers).all()
+
+# @app.post("/voip_users/{ip_range_start}/{ip_range_end}")
+# def populate_voip_users(ip_range_start: str, ip_range_end: str, db:Session=Depends(get_db)):
+
+#     # Extract the last octet from the IP addresses
+#     start = int(ip_range_start.split('.')[-1])
+#     end = int(ip_range_end.split('.')[-1])
+
+#     if start == 111:
+#         host_start=151
+
+#     # Base part of the IP address
+#     base_ip = '.'.join(ip_range_start.split('.')[:-1])
+
+#     id=1
+#     # Loop through the range and print the IPs
+#     for i in range(start, end + 1):
+#         server_ip=f"{base_ip}.{i}"
+#         host_ip=f"{base_ip}.{host_start}"
+#         voip_user_record = models.VoIPUsers(id=id, server_ip=server_ip,host_ip=host_ip ,status="Free")
+#         db.add(voip_user_record)
+#         db.commit()
+#         db.refresh(voip_user_record)
+#         id+=1
+#         host_start+=1
+
+#     return {'message':'Success'}
+
+# @app.patch("/voip_users/{server_ip}/{status}")
+# def update_voip_users(server_ip: str, status:str, db:Session=Depends(get_db)):
+#     user = db.query(models.VoIPUsers).filter(models.VoIPUsers.server_ip == server_ip).first()
+
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+    
+    
+#     user.status = status
+#     user.modified_on_utc = datetime.now(timezone.utc)  # Use timezone.utc directly
+    
+#     db.commit()
+#     db.refresh(user)
+#     return user
+
+
+
+@app.post("/call")
+def call(number: str = Form(...), extension: int = Form(...)):
+    # Define the URL and authentication
+    url = "http://192.168.89.100:8088/ari/channels"
+    auth = HTTPBasicAuth('test', 'test123')
+
+    # Define the data payload
+    data = {
+        'endpoint': f'PJSIP/{number}@fusionPBX-Trunk-015970296',
+        'extension': str(extension),
+        'context': 'internal',
+        'priority': '1',
+        'callerId': number,
+        "variables": {
+            "CALLERID(number)":number
+        },
+        "originator":number,
+        "channelId":number
+    }
+
+    response = requests.post(url, auth=auth, data=data)
+    return {'Code':response.status_code, 'Response':response.text}
+
+
+@app.post("/test-call")
+def test_call(number):
+    # Define the URL and authentication
+    url = "http://192.168.89.100:8088/ari/channels"
+    auth = HTTPBasicAuth('test', 'test123')
+
+    # Define the data payload
+    data = {
+        'endpoint': f'PJSIP/{number}@fusionPBX-Trunk-015970296',
+        'extension': '6',
+        'context': 'internal',
+        'priority': '1',
+        'callerId': number
+    }
+
+    response = requests.post(url, auth=auth, data=data)
+    return {'Response':'200 OK'}
+    # return response
+
+
+# @app.post("/call/{phone_number}")
+# def call(phone_number: str):
+#     base_url="http://localhost:8001/voip_users"
+#     response = requests.get(f"{base_url}")
+
+#     if response.status_code == 200:
+#         available_servers = [row for row in response.json() if row['status'] != 'Busy']
+#         if len(available_servers) == 0:
+#             return {'message': 'All asterisk servers are busy'}
+#         else:
+#             assigned_server = available_servers[0]  # Get the first available server
+#             assigned_server_ip = assigned_server['server_ip']
+#             host_ip = assigned_server['host_ip']  # Retrieve corresponding host_ip
+
+#     # Construct the URL to Post Request and initiate call using available asterisk server
+#     url = f"http://{host_ip}/call/{phone_number}/{assigned_server_ip}"
+
+#     # Make the POST request
+#     try:
+#         response = requests.post(url)
+
+#         # Check the response status
+#         if response.status_code == 200:
+#             print(f"Call initiated successfully to {phone_number} using server {assigned_server_ip}")
+#             return {'message': response.json() }# Assuming the server responds with a JSON body
+#         else:
+#             print(f"Failed to initiate call. Status code: {response.status_code}")
+#             return {'message': response.text}
+#     except requests.RequestException as e:
+#         print(f"Error occurred: {e}")
+#         return {'message': str(e)}
+    
+
+uvicorn.run(app, host="0.0.0.0", port=80)
+# uvicorn.run(app,  port=8001)

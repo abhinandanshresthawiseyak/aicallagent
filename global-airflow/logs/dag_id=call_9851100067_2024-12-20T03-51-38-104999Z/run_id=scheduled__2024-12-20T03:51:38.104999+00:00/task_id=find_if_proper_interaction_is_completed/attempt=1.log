@@ -1,0 +1,24 @@
+[2024-12-20T03:54:00.538+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-20T03:54:00.549+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9851100067_2024-12-20T03-51-38-104999Z.find_if_proper_interaction_is_completed scheduled__2024-12-20T03:51:38.104999+00:00 [queued]>
+[2024-12-20T03:54:00.552+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9851100067_2024-12-20T03-51-38-104999Z.find_if_proper_interaction_is_completed scheduled__2024-12-20T03:51:38.104999+00:00 [queued]>
+[2024-12-20T03:54:00.553+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-20T03:54:00.557+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): find_if_proper_interaction_is_completed> on 2024-12-20 03:51:38.104999+00:00
+[2024-12-20T03:54:00.562+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=33177) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-20T03:54:00.563+0000] {standard_task_runner.py:72} INFO - Started process 33178 to run task
+[2024-12-20T03:54:00.563+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9851100067_2024-12-20T03-51-38-104999Z', 'find_if_proper_interaction_is_completed', 'scheduled__2024-12-20T03:51:38.104999+00:00', '--job-id', '735', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmp2w_3ufuf']
+[2024-12-20T03:54:00.564+0000] {standard_task_runner.py:105} INFO - Job 735: Subtask find_if_proper_interaction_is_completed
+[2024-12-20T03:54:00.585+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9851100067_2024-12-20T03-51-38-104999Z.find_if_proper_interaction_is_completed scheduled__2024-12-20T03:51:38.104999+00:00 [running]> on host 1868de310944
+[2024-12-20T03:54:00.619+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9851100067_2024-12-20T03-51-38-104999Z' AIRFLOW_CTX_TASK_ID='find_if_proper_interaction_is_completed' AIRFLOW_CTX_EXECUTION_DATE='2024-12-20T03:51:38.104999+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-20T03:51:38.104999+00:00'
+[2024-12-20T03:54:00.619+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-20T03:54:00.624+0000] {base.py:84} INFO - Retrieving connection 'aicallagent'
+[2024-12-20T03:54:00.628+0000] {sql.py:544} INFO - Running statement: UPDATE user_details SET status = 'answered', modified_on_utc = now() at time zone 'utc' WHERE caller_id = 'demo-scheduled-from-ui-bnb41b8fca0-73db-4024-a5c6-efa5834eee8a', parameters: None
+[2024-12-20T03:54:00.630+0000] {sql.py:553} INFO - Rows affected: 1
+[2024-12-20T03:54:00.631+0000] {logging_mixin.py:190} INFO - Marked record demo-scheduled-from-ui-bnb41b8fca0-73db-4024-a5c6-efa5834eee8a as answered.
+[2024-12-20T03:54:00.631+0000] {python.py:240} INFO - Done. Returned value was: None
+[2024-12-20T03:54:00.636+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-20T03:54:00.636+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9851100067_2024-12-20T03-51-38-104999Z, task_id=find_if_proper_interaction_is_completed, run_id=scheduled__2024-12-20T03:51:38.104999+00:00, execution_date=20241220T035138, start_date=20241220T035400, end_date=20241220T035400
+[2024-12-20T03:54:00.655+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-12-20T03:54:00.664+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-12-20T03:54:00.665+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

@@ -1,0 +1,24 @@
+[2024-12-10T04:40:28.758+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-10T04:40:28.767+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9863800249_2024-12-10T04-40-15-220929Z.update_schedule_flag scheduled__2024-12-10T04:40:15.220929+00:00 [queued]>
+[2024-12-10T04:40:28.770+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9863800249_2024-12-10T04-40-15-220929Z.update_schedule_flag scheduled__2024-12-10T04:40:15.220929+00:00 [queued]>
+[2024-12-10T04:40:28.770+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-10T04:40:28.775+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): update_schedule_flag> on 2024-12-10 04:40:15.220929+00:00
+[2024-12-10T04:40:28.780+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=14571) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-10T04:40:28.781+0000] {standard_task_runner.py:72} INFO - Started process 14572 to run task
+[2024-12-10T04:40:28.782+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9863800249_2024-12-10T04-40-15-220929Z', 'update_schedule_flag', 'scheduled__2024-12-10T04:40:15.220929+00:00', '--job-id', '270', '--raw', '--subdir', 'DAGS_FOLDER/schedule_call.py', '--cfg-path', '/tmp/tmpk28lxkya']
+[2024-12-10T04:40:28.782+0000] {standard_task_runner.py:105} INFO - Job 270: Subtask update_schedule_flag
+[2024-12-10T04:40:28.805+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9863800249_2024-12-10T04-40-15-220929Z.update_schedule_flag scheduled__2024-12-10T04:40:15.220929+00:00 [running]> on host e4d9da3426d6
+[2024-12-10T04:40:28.845+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9863800249_2024-12-10T04-40-15-220929Z' AIRFLOW_CTX_TASK_ID='update_schedule_flag' AIRFLOW_CTX_EXECUTION_DATE='2024-12-10T04:40:15.220929+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-10T04:40:15.220929+00:00'
+[2024-12-10T04:40:28.845+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-10T04:40:28.850+0000] {base.py:84} INFO - Retrieving connection 'aicallagent'
+[2024-12-10T04:40:28.855+0000] {sql.py:544} INFO - Running statement: UPDATE user_details SET status = 'called', modified_on_utc = now() at time zone 'utc' WHERE id = 73, parameters: None
+[2024-12-10T04:40:28.856+0000] {sql.py:553} INFO - Rows affected: 1
+[2024-12-10T04:40:28.857+0000] {logging_mixin.py:190} INFO - Marked record 73 as scheduled.
+[2024-12-10T04:40:28.857+0000] {python.py:240} INFO - Done. Returned value was: None
+[2024-12-10T04:40:28.864+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-10T04:40:28.864+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9863800249_2024-12-10T04-40-15-220929Z, task_id=update_schedule_flag, run_id=scheduled__2024-12-10T04:40:15.220929+00:00, execution_date=20241210T044015, start_date=20241210T044028, end_date=20241210T044028
+[2024-12-10T04:40:28.874+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-12-10T04:40:28.882+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-12-10T04:40:28.883+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

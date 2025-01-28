@@ -1,0 +1,95 @@
+{
+  "type": "internet_issue_en",
+  "out_state": 5,
+  "question_audio_for_tts": {
+    "1": {
+      "yes": "Hello this is Sangita from Worldlink Customer Service. How can I help you?"
+    },
+    "2": {
+      "yes": "I see! I will help you with that! Could you check your router first? Do you see a red light blinking?",
+      "no": "Thank you for calling Wordlink Customer Service, have a good day!"
+    },
+    "3": {
+      "yes": "I checked it from our system. It seems there is an issue with the fiber cable. Our support technician will be in contact with you shortly!",
+      "no": "There doesn't seem to be any issue! For now, I will reset your router and it should work in a few minutes. Feel free to call us back."
+    },
+    "4": {
+      "yes": "Okay thank you for reaching out to Worldlink Customer Service! Have a good day!"
+    }
+  },
+  "llm_states": {
+    "1": {
+      "positive": [
+        "My internet has stopped working",
+        "The internet is not working at all",
+        "Websites are not loading",
+        "The internet is very slow",
+        "The WiFi signal is weak",
+        "Can't connect to WiFi",
+        "WiFi password is not working"
+      ],
+      "negative": [
+        "wrong number"
+      ]
+    },
+    "2": {
+      "positive": ["yes red light is blinking","yeah i see red light","Yeah, I see red light."],
+      "negative": ["The problem is still there", "It didn't make any difference","red light is not there", "no every thing is green", "everything looks okay to me"]
+    },
+    "3": {
+      "positive": ["sure","affirmative","yes","okay","alright","fine","thank you"],
+      "negative": ["It's still not working", "Not working", "Doesn't work", "No change", "Ah, it's not working", "Didn't work", "Didn't work"]
+    },
+    "4": {
+      "positive": ["Okay","sure","affirmative","yes","okay","alright","fine","thank you"],
+      "negative": ["It's still not working", "Not working", "Doesn't work", "No change", "Ah, it's not working", "Didn't work", "Didn't work"]
+    },
+    "repeat": [
+      ["I didn't understand", "Please say that again", "What did you say?", "Say it a bit louder, please", "Please repeat","pardon"]
+    ]
+  },
+  "tts_next_states": {
+    "1": {
+      "yes": {
+        "next_state": 2,
+        "audio_file": "internet_issue_en2yes.wav"
+      },
+      "no": {
+        "next_state": "out_state",
+        "audio_file": "internet_issue_en2no.wav"
+      },
+      "repeat": {
+        "next_state": 1,
+        "audio_file": "internet_issue_en1yes.wav"
+      }
+    },
+    "2": {
+      "yes": {
+        "next_state": "out_state",
+        "audio_file": "internet_issue_en3yes.wav"
+      },
+      "no": {
+        "next_state": "out_state",
+        "audio_file": "internet_issue_en3no.wav"
+      },
+      "repeat": {
+        "next_state": 2,
+        "audio_file": "internet_issue_en2yes.wav"
+      }
+    },
+    "3": {
+      "yes": {
+        "next_state": "out_state",
+        "audio_file": "internet_issue_en4yes.wav"
+      },
+      "no": {
+        "next_state": "out_state",
+        "audio_file": "internet_issue_en4no.wav"
+      },
+      "repeat": {
+        "next_state": 3,
+        "audio_file": "internet_issue_en3yes.wav"
+      }
+    }
+  }
+}

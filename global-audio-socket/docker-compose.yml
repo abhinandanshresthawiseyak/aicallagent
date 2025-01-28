@@ -1,0 +1,143 @@
+services:
+  global-fastapi-main:
+    container_name: global-fastapi-main
+    hostname: global-fastapi-main
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi # Ensure this Dockerfile is correctly placed in the context
+    environment:
+      - ASTERISK_SERVER=192.168.79.100:8088
+    # depends_on:
+    #   - postgres
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    networks:
+      wiselan79: 
+        ipv4_address: 192.168.79.109
+
+  global-websocket-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.ariwebsocket # Ensure this Dockerfile is correctly placed in the context
+    environment:
+      - ASTERISK_SERVER=192.168.79.100:8088
+    # depends_on:
+    #   - postgres
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    network_mode: service:global-fastapi-main 
+    tty: true
+
+  global-audiosocket-102:
+    container_name: global-audiosocket-102
+    hostname: global-audiosocket-102
+    # runtime: nvidia
+    build: .
+    image: global-audio-socket-base-image
+    networks:
+      wiselan79:
+        ipv4_address: 192.168.79.102
+    environment:
+      - FAST_API=192.168.79.109:8001
+      - TZ=Asia/Kathmandu
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    privileged: true
+
+  global-audiosocket-103:
+    container_name: global-audiosocket-103
+    hostname: global-audiosocket-103
+    # runtime: nvidia
+    image: global-audio-socket-base-image
+    networks:
+      wiselan79:
+        ipv4_address: 192.168.79.103
+    environment:
+      - FAST_API=192.168.79.109:8001
+    # environment:
+      - TZ=Asia/Kathmandu
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    privileged: true
+    depends_on:
+      - global-audiosocket-102
+
+  global-audiosocket-104:
+    container_name: global-audiosocket-104
+    hostname: global-audiosocket-104
+    # runtime: nvidia
+    image: global-audio-socket-base-image
+    networks:
+      wiselan79:
+        ipv4_address: 192.168.79.104
+    environment:
+      - FAST_API=192.168.79.109:8001
+    # environment:
+      # - TZ=Asia/Kathmandu
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    privileged: true
+    depends_on:
+      - global-audiosocket-102
+
+  global-audiosocket-105:
+    container_name: global-audiosocket-105
+    hostname: global-audiosocket-105
+    # runtime: nvidia
+    image: global-audio-socket-base-image
+    networks:
+      wiselan79:
+        ipv4_address: 192.168.79.105
+    environment:
+      - FAST_API=192.168.79.109:8001
+    # environment:
+      # - TZ=Asia/Kathmandu
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    privileged: true
+    depends_on:
+      - global-audiosocket-102
+
+  global-receiver-audio-socket-111:
+    container_name: global-receiver-audio-socket-111
+    hostname: global-receiver-audio-socket-111
+    # runtime: nvidia
+    image: global-audio-socket-base-image
+    # command: python receiver-tv.py
+    command: python receiver-internet.py
+    networks:
+      wiselan79:
+        ipv4_address: 192.168.79.111
+    environment:
+      - FAST_API=192.168.79.109:8001
+    # environment:
+      # - TZ=Asia/Kathmandu
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    restart: unless-stopped
+    volumes:
+      - ./:/app/.
+    privileged: true
+    depends_on:
+      - global-audiosocket-102
+  
+networks:
+  wiselan79:
+    external: true
+
+# volumes:
+#   postgres-data:

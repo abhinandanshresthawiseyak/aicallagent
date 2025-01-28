@@ -1,0 +1,26 @@
+[2024-12-23T05:12:21.008+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-12-23T05:12:21.019+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: call_9851100067_2024-12-23T05-10-02-827810Z.find_reason_for_unanswered scheduled__2024-12-23T05:10:02.827810+00:00 [queued]>
+[2024-12-23T05:12:21.023+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: call_9851100067_2024-12-23T05-10-02-827810Z.find_reason_for_unanswered scheduled__2024-12-23T05:10:02.827810+00:00 [queued]>
+[2024-12-23T05:12:21.023+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2024-12-23T05:12:21.029+0000] {taskinstance.py:2889} INFO - Executing <Task(_PythonDecoratedOperator): find_reason_for_unanswered> on 2024-12-23 05:10:02.827810+00:00
+[2024-12-23T05:12:21.033+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=935) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-12-23T05:12:21.034+0000] {standard_task_runner.py:72} INFO - Started process 936 to run task
+[2024-12-23T05:12:21.035+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'call_9851100067_2024-12-23T05-10-02-827810Z', 'find_reason_for_unanswered', 'scheduled__2024-12-23T05:10:02.827810+00:00', '--job-id', '813', '--raw', '--subdir', 'DAGS_FOLDER/complete_dag.py', '--cfg-path', '/tmp/tmpjlhbl64c']
+[2024-12-23T05:12:21.035+0000] {standard_task_runner.py:105} INFO - Job 813: Subtask find_reason_for_unanswered
+[2024-12-23T05:12:21.059+0000] {task_command.py:467} INFO - Running <TaskInstance: call_9851100067_2024-12-23T05-10-02-827810Z.find_reason_for_unanswered scheduled__2024-12-23T05:10:02.827810+00:00 [running]> on host 1868de310944
+[2024-12-23T05:12:21.096+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='call_9851100067_2024-12-23T05-10-02-827810Z' AIRFLOW_CTX_TASK_ID='find_reason_for_unanswered' AIRFLOW_CTX_EXECUTION_DATE='2024-12-23T05:10:02.827810+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-12-23T05:10:02.827810+00:00'
+[2024-12-23T05:12:21.097+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-12-23T05:12:21.098+0000] {logging_mixin.py:190} INFO - demo-scheduled-from-ui-bnb428e18b3-7ed1-4d11-9342-726c4e86de61
+[2024-12-23T05:12:21.098+0000] {logging_mixin.py:190} INFO - cause_txt: full_ring
+[2024-12-23T05:12:21.102+0000] {base.py:84} INFO - Retrieving connection 'aicallagent'
+[2024-12-23T05:12:21.107+0000] {sql.py:544} INFO - Running statement: UPDATE user_details SET status = 'full_ring', modified_on_utc = now() at time zone 'utc' WHERE caller_id = 'demo-scheduled-from-ui-bnb428e18b3-7ed1-4d11-9342-726c4e86de61', parameters: None
+[2024-12-23T05:12:21.109+0000] {sql.py:553} INFO - Rows affected: 1
+[2024-12-23T05:12:21.110+0000] {logging_mixin.py:190} INFO - Marked record demo-scheduled-from-ui-bnb428e18b3-7ed1-4d11-9342-726c4e86de61 as full_ring.
+[2024-12-23T05:12:21.110+0000] {python.py:240} INFO - Done. Returned value was: None
+[2024-12-23T05:12:21.115+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-12-23T05:12:21.116+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=call_9851100067_2024-12-23T05-10-02-827810Z, task_id=find_reason_for_unanswered, run_id=scheduled__2024-12-23T05:10:02.827810+00:00, execution_date=20241223T051002, start_date=20241223T051221, end_date=20241223T051221
+[2024-12-23T05:12:21.127+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-12-23T05:12:21.137+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-12-23T05:12:21.138+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
